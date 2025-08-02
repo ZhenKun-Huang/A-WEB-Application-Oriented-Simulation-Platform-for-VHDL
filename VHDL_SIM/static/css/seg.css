@@ -1,0 +1,135 @@
+.seven-segment-display {
+            position: relative;
+            width: 80px; /* 原来的240px除以3 */
+            height: 133.33px; /* 原来的400px除以3 */
+            background-color: #8a7e7e;
+            border-radius: 5px; /* 原来的15px除以3 */
+            box-shadow: 0 1.33px 2.67px rgba(0, 0, 0, 0.2); /* 数值相应调整 */
+            padding: 6.67px; /* 原来的20px除以3 */
+            box-sizing: border-box;
+            margin-bottom: 6.67px; /* 原来的20px除以3 */
+        }
+
+        .segment {
+            position: absolute;
+            background-color: #333;
+            transition: background-color 0.3s ease;
+            border-radius: 3.33px; /* 原来的10px除以3 */
+        }
+
+        /* Segment dimensions and positions 缩小三倍 */
+        .a { top: 6.67px; left: 13.33px; width: 53.33px; height: 6.67px; } /* 原始值分别除以3 */
+        .b { top: 16.67px; right: 6.67px; width: 6.67px; height: 40px; }
+        .c { bottom: 16.67px; right: 6.67px; width: 6.67px; height: 40px; }
+        .d { bottom: 6.67px; left: 13.33px; width: 53.33px; height: 6.67px; }
+        .e { bottom: 16.67px; left: 6.67px; width: 6.67px; height: 40px; }
+        .f { top: 16.67px; left: 6.67px; width: 6.67px; height: 40px; }
+        .g { top: 60.67px; left: 13.33px; width: 53.33px; height: 6.67px; }
+
+        button {
+            padding: 3.33px 6.67px; /* 原来的10px 20px除以3 */
+            margin: 1.67px; /* 原来的5px除以3 */
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 1.67px; /* 原来的5px除以3 */
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+         .switch {
+        position: relative;
+        width: 30px; /* 原来的60px的一半 */
+        height: 60px; /* 原来的120px的一半 */
+        display: inline-block;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 5px; /* 边界圆角缩小至一半 */
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 25px; /* 滑块高度的一半 */
+        width: 25px; /* 滑块宽度的一半 */
+        left: 2.5px; /* 到左侧距离的一半 */
+        bottom: 2.5px; /* 初始位置底部距离的一半 */
+        background-color: white;
+        transition: .4s;
+        border-radius: 5px; /* 圆角半径缩小至一半 */
+    }
+
+    input:checked + .slider {
+        background-color: #3a613a;
+    }
+
+    input:checked + .slider:before {
+        transform: translateY(-30px); /* 调整滑动距离以适应新的尺寸 */
+    }
+        .circle-button {
+        display: inline-block;
+        width: calc(100px / 1.5); /* 直径缩小1.5倍 */
+        height: calc(100px / 1.5); /* 直径缩小1.5倍 */
+        background-color: #173218;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: calc(100px / 1.5); /* 文字垂直居中，同时缩小 */
+        font-size: calc(16px / 1.5); /* 字体大小缩小1.5倍 */
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .circle-button:hover {
+        background-color: #214523;
+        transform: scale(1.05);
+    }
+
+    .circle-button:active {
+        background-color: #112313;
+        transform: scale(0.95);
+    }
+
+    .rounded-square-button {
+        display: inline-block;
+        width: calc(100px / 1.5); /* 宽度缩小1.5倍 */
+        height: calc(100px / 1.5); /* 高度与宽度相同，形成正方形 */
+        background-color: #204221;
+        color: white;
+        border-radius: 15px; /* 设置统一的圆角半径来创建弧度 */
+        text-align: center;
+        line-height: calc(100px / 1.5); /* 垂直居中文本 */
+        font-size: calc(16px / 1.5); /* 字体大小也相应减小 */
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .rounded-square-button:hover {
+        background-color: #173517;
+        transform: scale(1.05);
+    }
+
+    .rounded-square-button:active {
+        background-color: #132914;
+        transform: scale(0.95);
+    }

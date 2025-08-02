@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VHDL在线仿真平台</title>
+<link href="//unpkg.com/layui@2.9.21/dist/css/layui.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+  <script src="//unpkg.com/layui@2.9.21/dist/layui.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/vhdl.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/verilog.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename = 'css/altera.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="{{ url_for('static', filename='js/demo.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/vhdlexample.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/exa1.js') }}"></script>
+  <link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename = 'css/altera.css') }}">
+<link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename = 'css/seg.css') }}">
+
+<style>
+
+
+
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card h2 {
+            margin: 0 0 10px 0;
+            color: #4CAF50;
+        }
+        .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .timestamp {
+            text-align: right;
+            color: #888;
+            margin-top: 20px;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .update {
+            animation: pulse 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body onload="vhdup1()" onbeforeunload="quitsim()" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" ondragenter="dragOverHandler(event);" ondragleave="dragLeave();">
+
+
+<i class="bi bi-lightbulb-fill" >可用端口：clk(in,默认10hz)，sw[3:0](in)，btn[1:0](in)，led[3:0](out)，seg0[7:0](out)，seg1[7:0](out)</i>
+<a  href="/" onclick="quitsim()"><i class="bi bi-lightbulb-fill"  >返回主界面</i></a>
+
+
+<div class="timestamp" id="timestamp">最后操作时间: --:--:--</div><!--led图标-->
+
+<div class="main-container">
+<div class="container-fluid border border-2 border-dark rounded-4 py-1 px-1 m-0" background-color="blue"; style="width: 100%;height: 250px" >
+  <!--led图标-->
+  <div>
+
+    <div>
+<i class="bi bi-lightbulb-fill"style="position:absolute;left:30px;top: 75px" >led7</i>
+  <svg id="led7"  xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:0px;top: 100px" width="100" height="100" fill="currentColor" class="bi bi-lightbulb" viewBox="0 0 16 16">
+  <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/>
+  </svg>
+
+<label class="switch"style="position:absolute;left:35px;top: 210px" >
+  <input type="checkbox" id="Switch7" onclick="checkToggleStatus()" >
+  <span class="slider"></span>
+</label>
+
+<i class="bi bi-lightbulb-fill"style="position:absolute;left:30px;top: 270px" >sw7</i>
+    </div>
+
+        <div>
+            <i class="bi bi-lightbulb-fill"style="position:absolute;left:130px;top: 75px" >led6</i>
+  <svg id="led6"  xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:100px;top: 100px" width="100" height="100" fill="currentColor" class="bi bi-lightbulb" viewBox="0 0 16 16">
+  <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/>
+  </svg>
+
+            <label class="switch"style="position:absolute;left:135px;top: 210px" >
+  <input type="checkbox" id="Switch6" onclick="checkToggleStatus()" >
+  <span class="slider"></span>
+</label>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;left:130px;top: 270px" >sw6</i>
+        </div>
+
+            <div>
+                <i class="bi bi-lightbulb-fill"style="position:absolute;left:230px;top: 75px" >led5</i>
+  <svg id="led5"  xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:200px;top: 100px" width="100" height="100" fill="currentColor" class="bi bi-lightbulb" viewBox="0 0 16 16">
+  <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/>
+  </svg>
+                            <label class="switch"style="position:absolute;left:235px;top: 210px" >
+  <input type="checkbox" id="Switch5" onclick="checkToggleStatus()" >
+  <span class="slider"></span>
+</label>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;left:230px;top: 270px" >sw5</i>
+            </div>
+
+                <div>
+                    <i class="bi bi-lightbulb-fill"style="position:absolute;left:330px;top: 75px" >led4</i>
+  <svg id="led4"  xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:300px;top: 100px" width="100" height="100" fill="currentColor" class="bi bi-lightbulb" viewBox="0 0 16 16">
+  <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/>
+  </svg>
+                    <label class="switch"style="position:absolute;left:335px;top: 210px" >
+  <input type="checkbox" id="Switch4" onclick="checkToggleStatus()" >
+  <span class="slider"></span>
+</label>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;left:330px;top: 270px" >sw4</i>
+                </div>
+
+                      <div>
+                    <i class="bi bi-lightbulb-fill"style="position:absolute;left:430px;top: 75px" >led3</i>
+  <svg id="led3"  xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:400px;top: 100px" width="100" height="100" fill="currentColor" class="bi bi-lightbulb" viewBox="0 0 16 16">
+  <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/>
+  </svg>
+                    <label class="switch"style="position:absolute;left:435px;top: 210px" >
+  <input type="checkbox" id="Switch3" onclick="checkToggleStatus()" >
+  <span class="slider"></span>
+</label>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;left:430px;top: 270px" >sw3</i>
+                </div>
+
+                       <div>
+                    <i class="bi bi-lightbulb-fill"style="position:absolute;left:530px;top: 75px" >led2</i>
+  <svg id="led2"  xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:500px;top: 100px" width="100" height="100" fill="currentColor" class="bi bi-lightbulb" viewBox="0 0 16 16">
+  <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/>
+  </svg>
+                    <label class="switch"style="position:absolute;left:535px;top: 210px" >
+  <input type="checkbox" id="Switch2" onclick="checkToggleStatus()" >
+  <span class="slider"></span>
+</label>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;left:530px;top: 270px" >sw2</i>
+                </div>
+
+                       <div>
+                    <i class="bi bi-lightbulb-fill"style="position:absolute;left:630px;top: 75px" >led1</i>
+  <svg id="led1"  xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:600px;top: 100px" width="100" height="100" fill="currentColor" class="bi bi-lightbulb" viewBox="0 0 16 16">
+  <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/>
+  </svg>
+                    <label class="switch"style="position:absolute;left:635px;top: 210px" >
+  <input type="checkbox" id="Switch1" onclick="checkToggleStatus()" >
+  <span class="slider"></span>
+</label>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;left:630px;top: 270px" >sw1</i>
+                </div>
+
+                        <div>
+                    <i class="bi bi-lightbulb-fill"style="position:absolute;left:730px;top: 75px" >led0</i>
+  <svg id="led0"  xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:700px;top: 100px" width="100" height="100" fill="currentColor" class="bi bi-lightbulb" viewBox="0 0 16 16">
+  <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/>
+  </svg>
+                    <label class="switch"style="position:absolute;left:735px;top: 210px" >
+  <input type="checkbox" id="Switch0" onclick="checkToggleStatus()" >
+  <span class="slider"></span>
+</label>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;left:730px;top: 270px" >sw0</i>
+                </div>
+
+
+
+</div>
+
+<i class="bi bi-lightbulb-fill"style="position:absolute;top: 75px;left: 830px" >seg1</i>
+<div class="seven-segment-display" id="display0"style="position: absolute;left: 820px;top: 105px">
+
+    <div class="segment a" id="seg1A"></div>
+    <div class="segment b" id="seg1B"></div>
+    <div class="segment c" id="seg1C"></div>
+    <div class="segment d" id="seg1D"></div>
+    <div class="segment e" id="seg1E"></div>
+    <div class="segment f" id="seg1F"></div>
+    <div class="segment g" id="seg1G"></div>
+</div>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;top: 75px;left: 900px" >seg0</i>
+<div class="seven-segment-display" id="display1"style="position: absolute;left: 890px;top: 105px">
+    <div class="segment a" id="seg0A"></div>
+    <div class="segment b" id="seg0B"></div>
+    <div class="segment c" id="seg0C"></div>
+    <div class="segment d" id="seg0D"></div>
+    <div class="segment e" id="seg0E"></div>
+    <div class="segment f" id="seg0F"></div>
+    <div class="segment g" id="seg0G"></div>
+</div>
+
+<a  onmousedown="btn3down()" onmouseup="btn3up()" class="rounded-square-button"style="position:absolute;top: 100px;left: 1000px"></a>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;left:1010px;top: 165px" >btn3</i>
+    <a  onmousedown="btn2down()" onmouseup="btn2up()" class="rounded-square-button"style="position:absolute;top: 190px;left: 1000px"></a>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;left:1010px;top: 255px" >btn2</i>
+
+    <a  onmousedown="btn1down()" onmouseup="btn1up()" class="rounded-square-button"style="position:absolute;top: 100px;left: 1090px"></a>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;left:1100px;top: 165px" >btn0</i>
+    <a  onmousedown="btn0down()" onmouseup="btn0up()" class="rounded-square-button"style="position:absolute;top: 190px;left: 1090px"></a>
+    <i class="bi bi-lightbulb-fill"style="position:absolute;left:1100px;top: 255px" >btn1</i>
+
+  </div>
+
+
+
+
+
+<!--功能按钮-->
+<div class="container-fluid text-center mb-1">
+  <button  class="btn btn-success" id="bstart1"  onclick="start1sim()"><i class="bi bi-lightbulb-fill">开始仿真</i></button>  <!--开始-->
+  <button class="btn btn-success" id="bstop1" disabled onclick="stop1sim()"><i class="bi bi-lightbulb-fill" >停止仿真</i></button>  <!--停止-->
+</div>
+
+  <!--选择示例程序代码区域-->
+<div class="container-fluid text-center mb-1">
+  <b>示例-计数器:</b>
+  <label id="exampleslabel" for="examples" style="display:none">VHDL:</label>
+  <select id="examples" name="examples" style="display:none" onchange="loadExample('examples')">
+  </select>
+  <label id="examplesverlabel" for="examplesver" style="display:none">Verilog:</label>
+  <select id="examplesver" name="examplesver" style="display:none" onchange="loadExample('examplesver')">
+  </select>
+</div>
+
+  <!--编译结果提示区域-->
+<div id="log" class="container-fluid m-0 p-0 text-danger"></div>
+
+  <!--代码区域-->
+<div class="container-fluid border border-2 border-dark rounded-4 py-1 px-1 m-0">
+    <pre><code id="vhdlcode"></code></pre>
+</div>
+    </div>
+
+
+
+</body>
+</html>

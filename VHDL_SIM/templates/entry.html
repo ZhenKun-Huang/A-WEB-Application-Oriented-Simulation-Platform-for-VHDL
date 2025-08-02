@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VHDL在线仿真平台</title>
+    <script src="{{ url_for('static', filename='js/entry.js') }}"></script>
+  <style>
+        /* 设置页面背景颜色为#005867 */
+        body {
+            background-color: #005867;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center; /* 让主容器居中 */
+            min-height: 100vh; /* 确保body最小高度为视窗高度 */
+            box-sizing: border-box;
+        }
+        .main-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden; /* 防止内部元素超出边界 */
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            margin: 20px;
+        }
+        .content-section {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            flex-grow: 1; /* 使主体内容占据剩余空间 */
+        }
+        .image-section img {
+            max-width: 100%;
+            height: auto;
+            margin-right: 20px; /* 图像与按钮之间的间隔 */
+        }
+        .button-section {
+            display: flex;
+            flex-direction: column; /* 按钮垂直排列 */
+            gap: 15px; /* 增加按钮之间的间距 */
+        }
+        .button-section button {
+            padding: 15px; /* 增加按钮内边距以放大按钮 */
+            width: 120px; /* 增加按钮宽度 */
+            background-color: #005867; /* 背景颜色 */
+            color: white; /* 文本颜色 */
+            border: none; /* 移除默认边框 */
+            border-radius: 8px; /* 圆角边框 */
+            cursor: pointer; /* 鼠标悬停时显示为手型 */
+            transition: background-color 0.3s; /* 平滑过渡效果 */
+            font-size: 16px; /* 增加字体大小 */
+        }
+        .button-section button:hover {
+            background-color: #005867; /* 鼠标悬停时的背景颜色 */
+        }
+        .button-section button:active {
+            background-color: #09500b; /* 点击时的背景颜色 */
+        }
+        /* 底部图片样式 */
+        .footer-image {
+            width: 60%; /* 减小图片宽度 */
+            max-width: 400px; /* 设置图片的最大宽度 */
+            display: block;
+            margin: 20px auto; /* 居中对齐并添加上下外边距 */
+        }
+    </style>
+</head>
+<body>
+
+<!-- 主容器 -->
+<div class="main-container">
+    <!-- 内容部分 -->
+    <div class="content-section">
+        <!-- 图像部分 -->
+        <div class="image-section">
+            <img src="static/school.jpg" alt="顶部图像的内容">
+        </div>
+
+
+        <!-- 按钮部分 -->
+        <div class="button-section">
+                     <!-- 访问人数显示 -->
+      <div style="margin-top:20px;">
+            当前有 <span id="visitorCount">{{ visit_count }}</span> 人正在使用此仿真平台。
+        </div>
+
+            <a href="./demo"><button id="new">新建仿真</button></a>
+            <a href="./example1"><button id="example">载入示例</button></a>
+        </div>
+
+
+
+    </div>
+
+    <!-- 底部图片 -->
+    <img src="static/logo.png" alt="底部图像的内容" class="footer-image">
+</div>
+
+</body>
+</html>
